@@ -1,0 +1,17 @@
+{
+  "name": "cache-strategies-demo",
+  "version": "1.0.0",
+  "description": "Educational demo of Cache-Aside, Read-Through, Write-Through, Write-Back and Write-Around caching strategies using Express, MongoDB and Redis.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node src/data/seed.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.9.0",
+    "redis": "^4.7.0"
+  }
+}

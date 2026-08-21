@@ -1,0 +1,108 @@
+### Caching Strategies Demo — API requests
+### Works with the VS Code "REST Client" extension or JetBrains' built-in HTTP Client.
+### Click "Send Request" above any block below (or run all of them top to bottom).
+### App must be running first: npm start
+
+@baseUrl = http://localhost:3000/api
+
+### -----------------------------------------------------------------------
+### Baseline (no caching)
+### -----------------------------------------------------------------------
+
+### List all products straight from MongoDB
+GET {{baseUrl}}/products
+
+### Reseed the sample catalog (p1..p5)
+POST {{baseUrl}}/seed
+
+### -----------------------------------------------------------------------
+### Reading strategies — GET, one read per call, no side effects.
+### Run the same request twice in a row: first is a MISS, second is a HIT.
+### -----------------------------------------------------------------------
+
+### Cache-Aside — read p1 (default id)
+GET {{baseUrl}}/cache-aside
+
+### Cache-Aside — read a specific id
+GET {{baseUrl}}/cache-aside?id=p1
+
+### Read-Through — read p2 (default id)
+GET {{baseUrl}}/read-through
+
+### Read-Through — read a specific id
+GET {{baseUrl}}/read-through?id=p1
+
+### -----------------------------------------------------------------------
+### Cache clearing — separate from reading, since it's a mutation.
+### -----------------------------------------------------------------------
+
+### Clear one strategy's key for one id (guarantees the next read above is a MISS)
+DELETE {{baseUrl}}/cache?strategy=cacheAside&id=p1
+
+### Clear every key for one strategy
+DELETE {{baseUrl}}/cache?strategy=readThrough
+
+### Clear every demo cache key across all strategies
+DELETE {{baseUrl}}/cache
+
+### -----------------------------------------------------------------------
+### Writing strategies — POST, each call runs the full create -> update
+### (Write-Back also flushes) story and returns a step-by-step trace.
+### Body is optional; omit "id" to auto-generate a fresh product each run.
+### -----------------------------------------------------------------------
+
+### Write-Through — auto-generated product
+POST {{baseUrl}}/write-through
+
+### Write-Through — specific product
+POST {{baseUrl}}/write-through
+Content-Type: application/json
+
+{
+  "id": "p20",
+  "name": "Laptop Stand",
+  "category": "Office",
+  "price": 29.99,
+  "stock": 100
+}
+
+### Write-Around — auto-generated product
+POST {{baseUrl}}/write-around
+
+### Write-Around — specific product
+POST {{baseUrl}}/write-around
+Content-Type: application/json
+
+{
+  "id": "p21",
+  "name": "Desk Lamp",
+  "category": "Office",
+  "price": 18.50,
+  "stock": 75
+}
+
+### Write-Back — auto-generated product
+POST {{baseUrl}}/write-back
+
+### Write-Back — specific product
+POST {{baseUrl}}/write-back
+Content-Type: application/json
+
+{
+  "id": "p596",
+  "name": "New One",
+  "category": "Office",
+  "price": 42.00,
+  "stock": 40
+}
+
+### -----------------------------------------------------------------------
+### Inspection helpers — look at raw MongoDB / Redis state for an id.
+### Swap ":id" or "p1" below for a productId from any response above.
+### -----------------------------------------------------------------------
+
+### Raw MongoDB document
+GET {{baseUrl}}/inspect/mongo/p1
+
+### Raw Redis entry (strategy: cacheAside, readThrough, writeThrough, writeAround, writeBack)
+GET {{baseUrl}}/inspect/redis/p1?strategy=cacheAside
