@@ -409,3 +409,14 @@ Throughout, watch the `npm start` terminal — every strategy logs its own
 `HIT` / `MISS` / `READ` / `WRITE` / `STORE` / `INVALIDATE` / `FLUSH` events,
 so you can see exactly which system (Redis, MongoDB, or both) each request
 touched.
+
+
+# License
+
+Copyright © 2026 Aya Nabil Othman. All rights reserved.
+
+This repository is provided for educational and demonstration purposes only.
+
+You may view, clone, and run the code for personal learning.
+
+You may not copy, redistribute, republish, sublicense, or use this code or substantial portions of it in commercial products, paid courses, tutorials, training programs, workshops, or other paid content without prior written permission.
